@@ -1,0 +1,31 @@
+{
+  "name": "@sspiff/template-loader",
+  "version": "0.1.0",
+  "description": "webpack loader that renders output using lodash.template",
+  "main": "src/index.js",
+  "files": [
+    "src/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sspiff",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sspiff/webpack-template-loader.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/sspiff/webpack-template-loader/issues"
+  },
+  "homepage": "https://github.com/sspiff/webpack-template-loader#readme",
+  "dependencies": {
+    "lodash.template": "^4.5.0"
+  },
+  "peerDependencies": {
+    "webpack": ">=5"
+  }
+}
