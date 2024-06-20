@@ -1,7 +1,7 @@
 {
   "name": "@sspiff/template-loader",
-  "version": "0.1.0",
-  "description": "webpack loader that renders output using lodash.template",
+  "version": "0.2.0",
+  "description": "webpack loader that renders output using handlebars",
   "main": "src/index.js",
   "files": [
     "src/*"
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/sspiff/webpack-template-loader#readme",
   "dependencies": {
-    "lodash.template": "^4.5.0"
+    "handlebars": "^4.7.8"
   },
   "peerDependencies": {
     "webpack": ">=5"

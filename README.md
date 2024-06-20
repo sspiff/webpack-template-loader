@@ -1,5 +1,5 @@
 # webpack template-loader
-webpack loader that renders output using lodash.template.
+webpack loader that renders output using handlebars.
 
 
 ## Installation
@@ -21,28 +21,29 @@ $ npm install -D @sspiff/template-loader
 ## Overview
 
 `template-loader` is a webpack loader that transforms its input using
-[lodash.template](https://lodash.com/docs/#template) with the help of a webpack
+[handlebars](https://handlebarsjs.com/guide/) with the help of a webpack
 plugin.  It can serve as an alternative to (although not a drop-in replacement
 for) `html-webpack-plugin`, for example, or used to generate JSON from a
 template.
 
 `template-loader` operates in two phases: First as a loader in which it
 generates javascript that, when executed, will output the results of passing
-its input through lodash.template.  Then as a webpack plugin that will execute
+its input through handlebars.  Then as a webpack plugin that will execute
 the javascript to produce the rendered output.  *Because of this two-phase
 approach, it must be the last applied (i.e. the first listed) loader in the
 chain.*
 
-When compiling a template, `template-loader` makes two functions available
-for the template to use: `requireResource()` and `requireEntry()`.
+When compiling a template, `template-loader` makes two
+[helpers](https://handlebarsjs.com/guide/#custom-helpers) available
+for the template to use: `requireResource` and `requireEntry`.
 
-`requireResource()` will return the webpack output path for static resources
+`requireResource` will return the webpack output path for static resources
 (e.g. `asset/resource` type modules).  Use it, for example, in JSON templates
 to reference images or other assets.
 
-`requireEntry()` will return the webpack output path for entry-type modules.
+`requireEntry` will return the webpack output path for entry-type modules.
 It takes as input the chunk name as defined in the entry descriptor in
-the webpack configuration.  Modules referenced using `requireEntry()` should
+the webpack configuration.  Modules referenced using `requireEntry` should
 generally be defined as entry modules in the webpack config.  Use it, for
 example, in an HTML template to reference a webpack-built javascript bundle.
 
@@ -87,11 +88,11 @@ And somewhere in `src/index.html`:
 
 ```
 <head>
-  <link rel="icon" href="<%= requireResource('./src/favicon.png') %>" />
+  <link rel="icon" href="{{requireResource "./src/favicon.png"}}" />
 </head>
 
 <body>
-  <script src="<%= requireEntry('bundle') %>"></script>
+  <script src="{{requireEntry "bundle"}}"></script>
 </body>
 ```
 

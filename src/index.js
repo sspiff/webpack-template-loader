@@ -2,8 +2,9 @@
 const path = require('path')
 const vm = require('vm')
 
-const lodashTemplateResolved = require.resolve('lodash.template')
-const template = require(lodashTemplateResolved)
+// see https://github.com/handlebars-lang/handlebars.js/issues/953
+const handlebarsResolved = require.resolve('handlebars/dist/handlebars.js')
+const Handlebars = require(handlebarsResolved)
 
 
 function loader(source) {
@@ -21,12 +22,13 @@ function loader(source) {
   }
 
   // make a pass through the template to pick up the requires
-  const compiled = template(source)
-  compiled({
-      requireResource,
-      requireEntry: () => '',
-      T: this._compilation.TemplateRenderPlugin._getParameters(chunkName, 'loader'),
-   })
+  const template = Handlebars.compile(source)
+  template({}, {
+      helpers: {
+        requireResource,
+        requireEntry: () => '',
+      },
+    })
 
   // use webpack's own require to get urls to asset resources
   const requireResourcesCode = resources.map(r =>
@@ -34,16 +36,18 @@ function loader(source) {
     ).join('\n')
 
   return `
-const template = require('${lodashTemplateResolved}')
+const Handlebars = require('${handlebarsResolved}')
 const source = ${JSON.stringify(source)}
-const compiled = template(source)
+const template = Handlebars.compile(source)
 
 const resources = {}
 ${requireResourcesCode}
 
-T.__rendering = compiled({
-    requireResource: r => resources[r],
-    requireEntry: n => T.__entryMap[n],
+T.__rendering = template({}, {
+    helpers: {
+      requireResource: r => resources[r],
+      requireEntry: n => T.__entryMap[n],
+    },
   })
 
 `
