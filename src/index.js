@@ -43,10 +43,10 @@ const template = Handlebars.compile(source)
 const resources = {}
 ${requireResourcesCode}
 
-T.__rendering = template({}, {
+T.rendering = template({}, {
     helpers: {
       requireResource: r => resources[r],
-      requireEntry: n => T.__entryMap[n],
+      requireEntry: n => T.entryMap[n],
     },
   })
 
@@ -127,11 +127,9 @@ class TemplateRenderPlugin {
           const file = compilation.getAsset(assetName)
           const renderContext = {
               T: {
-                __self: chunkName,
-                __entryMap: Object.fromEntries(entryMapPairs.map(([n, f]) => (
+                entryMap: Object.fromEntries(entryMapPairs.map(([n, f]) => (
                   [n, path.relative(path.dirname(assetName), f)]))),
-                __rendering: undefined,
-                ...this._getParameters(chunkName, 'render'),
+                rendering: undefined,
               },
               // some webpack boilerplate needs these:
               self: { location: {} },
@@ -143,7 +141,7 @@ class TemplateRenderPlugin {
           vm.createContext(renderContext)
           script.runInContext(renderContext)
           compilation.updateAsset(assetName,
-            new compiler.webpack.sources.RawSource(renderContext.T.__rendering))
+            new compiler.webpack.sources.RawSource(renderContext.T.rendering))
         })
       })
     })
