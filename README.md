@@ -47,6 +47,9 @@ the webpack configuration.  Modules referenced using `requireEntry` should
 generally be defined as entry modules in the webpack config.  Use it, for
 example, in an HTML template to reference a webpack-built javascript bundle.
 
+The context (or parameters) for each template are given when instantiating
+the plugin.  See the example below.
+
 
 ## Basic Usage
 
@@ -58,7 +61,9 @@ const TemplateRenderPlugin = require('@sspiff/template-loader').renderPlugin
 module.exports = {
   entry: {
     indexhtml: {
-      import: 'template!=!./src/index.html',
+      // the 'template!=!' prefix is used to identitfy templates to be
+      // consumed by the template-loader:
+      import: 'template!=!./src/index.html.hbs',
       filename: 'index.html',
     },
     bundle: {
@@ -69,6 +74,8 @@ module.exports = {
   module: {
     rules: [
       {
+        // this rule will route entry imports that start with 'template!=!'
+        // to the template-loader:
         test: /^template$/,
         loader: '@sspiff/template-loader',
       },
@@ -79,7 +86,17 @@ module.exports = {
     ],
   },
   plugins: [
-    new TemplateRenderPlugin(),
+    // a TemplateRenderPlugin must be instantiated in order to complete
+    // the final renderings of the templates:
+    new TemplateRenderPlugin({
+      // template-specific options can be provided here, indexed by entry name:
+      indexhtml: {
+        // the context/parameters for the 'indexhtml' template:
+        context: {
+          mytitle: "@sspiff/template-loader Example",
+        },
+      },
+    }),
   ],
 }
 ```
@@ -88,7 +105,8 @@ And somewhere in `src/index.html`:
 
 ```
 <head>
-  <link rel="icon" href="{{requireResource "./src/favicon.png"}}" />
+  <link rel="icon" href="{{requireResource "./favicon.png"}}" />
+  <title>{{mytitle}}</title>
 </head>
 
 <body>

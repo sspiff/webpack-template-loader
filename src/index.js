@@ -23,7 +23,9 @@ function loader(source) {
 
   // make a pass through the template to pick up the requires
   const template = Handlebars.compile(source)
-  template({}, {
+  const templateContext =
+    this._compilation.TemplateRenderPlugin._getTemplateContext(chunkName)
+  template(templateContext, {
       helpers: {
         requireResource,
         requireEntry: () => '',
@@ -43,7 +45,7 @@ const template = Handlebars.compile(source)
 const resources = {}
 ${requireResourcesCode}
 
-T.rendering = template({}, {
+T.rendering = template(T.templateContext, {
     helpers: {
       requireResource: r => resources[r],
       requireEntry: n => T.entryMap[n],
@@ -59,17 +61,20 @@ const STAGE_BASIC = -10    // webpack doesn't export this?
 class TemplateRenderPlugin {
   constructor(options) {
     this._options = {
-      getParameters: () => ({}),
-      ...options,
-    }
+        ...options,
+      }
   }
 
-  _getParameters(chunkName, phase) {
-    return this._options.getParameters({
-      chunkName,
-      phase,
-      compilation: this._compilation,
-    })
+  _getOptions(chunkName) {
+    return {
+        ...this._options[chunkName],
+      }
+  }
+
+  _getTemplateContext(chunkName) {
+    return {
+        ...this._getOptions(chunkName).context,
+      }
   }
 
   apply(compiler) {
@@ -130,6 +135,7 @@ class TemplateRenderPlugin {
                 entryMap: Object.fromEntries(entryMapPairs.map(([n, f]) => (
                   [n, path.relative(path.dirname(assetName), f)]))),
                 rendering: undefined,
+                templateContext: this._getTemplateContext(chunkName),
               },
               // some webpack boilerplate needs these:
               self: { location: {} },
