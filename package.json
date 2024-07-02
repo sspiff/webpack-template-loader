@@ -22,10 +22,8 @@
     "url": "https://github.com/sspiff/webpack-template-loader/issues"
   },
   "homepage": "https://github.com/sspiff/webpack-template-loader#readme",
-  "dependencies": {
-    "handlebars": "^4.7.8"
-  },
   "peerDependencies": {
-    "webpack": ">=5"
+    "handlebars": "^4.7.8",
+    "webpack": "^5.67.0"
   }
 }
