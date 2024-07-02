@@ -15,9 +15,6 @@
     "type": "git",
     "url": "git+https://github.com/sspiff/webpack-template-loader.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "bugs": {
     "url": "https://github.com/sspiff/webpack-template-loader/issues"
   },
