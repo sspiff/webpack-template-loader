@@ -2,6 +2,7 @@
   "name": "@sspiff/webpack-template-loader",
   "version": "0.2.0",
   "description": "webpack loader that renders output using handlebars",
+  "keywords": ["webpack", "loader", "template", "handlebars"],
   "main": "src/index.js",
   "files": [
     "src/*"
