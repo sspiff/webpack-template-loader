@@ -4,15 +4,6 @@ webpack loader that renders output using handlebars.
 
 ## Installation
 
-If not already configured, add the registry for the `@sspiff` package scope
-to the npm configuration:
-
-```
-$ npm config set @sspiff:registry https://npm.pkg.github.com/sspiff -L project
-```
-
-Install the package:
-
 ```
 $ npm install -D @sspiff/template-loader
 ```
@@ -55,30 +46,30 @@ the plugin.  See the example below.
 
 In `webpack.config.js`:
 
-```
-const TemplateRenderPlugin = require('@sspiff/template-loader').renderPlugin
+<pre>
+<b>const TemplateRenderPlugin = require('@sspiff/template-loader').renderPlugin</b>
 
 module.exports = {
   entry: {
-    indexhtml: {
-      // the 'template!=!' prefix is used to identitfy templates to be
-      // consumed by the template-loader:
-      import: 'template!=!./src/index.html.hbs',
+    <em><b>indexhtml</b></em>: {
+      <b>// the 'template!=!' prefix is used to identitfy templates to be
+      // consumed by the template-loader:</b>
+      import: '<b>template!=!./src/index.html.hbs</b>',
       filename: 'index.html',
     },
-    bundle: {
+    <em><b>bundle</b></em>: {
       import: './src/index.js',
       filename: 'bundle.js',
     },
   },
   module: {
     rules: [
-      {
+      <b>{
         // this rule will route entry imports that start with 'template!=!'
         // to the template-loader:
         test: /^template$/,
         loader: '@sspiff/template-loader',
-      },
+      },</b>
       {
         test: /\.png$/i,
         type: 'asset/resource',
@@ -86,31 +77,31 @@ module.exports = {
     ],
   },
   plugins: [
-    // a TemplateRenderPlugin must be instantiated in order to complete
+    <b>// a TemplateRenderPlugin must be instantiated in order to complete
     // the final renderings of the templates:
     new TemplateRenderPlugin({
       // template-specific options can be provided here, indexed by entry name:
-      indexhtml: {
-        // the context/parameters for the 'indexhtml' template:
+      <em>indexhtml</em>: {
+        // the context/parameters for the '<em>indexhtml</em>' template:
         context: {
-          mytitle: "@sspiff/template-loader Example",
+          <em>mytitle</em>: "@sspiff/template-loader Example",
         },
       },
-    }),
+    }),</b>
   ],
 }
-```
+</pre>
 
-And somewhere in `src/index.html`:
+And somewhere in `src/index.html.hbs`:
 
-```
-<head>
-  <link rel="icon" href="{{requireResource "./favicon.png"}}" />
-  <title>{{mytitle}}</title>
-</head>
+<pre>
+&lt;head>
+  &lt;link rel="icon" href="<b>{{requireResource "./favicon.png"}}</b>" />
+  &lt;title><b>{{<em>mytitle</em>}}</b>&lt;/title>
+&lt;/head>
 
-<body>
-  <script src="{{requireEntry "bundle"}}"></script>
-</body>
-```
+&lt;body>
+  &lt;script src="<b>{{requireEntry "<em>bundle</em>"}}</b>">&lt;/script>
+&lt;/body>
+</pre>
 
